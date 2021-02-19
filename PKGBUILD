@@ -12,9 +12,10 @@ sha256sums=('SKIP')
 package()
 {
     # install the package files
-    cp -a src/* "${pkgdir}"
+    cp -a ${srcdir}/${pkgname}/src/usr ${pkgdir}
 
     # mask the mkinitcpio hooks
+    mkdir -p "${pkgdir}/etc/pacman.d/hooks"
     touch "${pkgdir}/etc/pacman.d/hooks/90-mkinitcpio-install.hook"
     touch "${pkgdir}/etc/pacman.d/hooks/60-mkinitcpio-remove.hook"
 }
