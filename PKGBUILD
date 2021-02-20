@@ -15,8 +15,9 @@ package()
     cp -a ${srcdir}/${pkgname}/src/usr ${pkgdir}
 
     # mask the default loaderentry creator
+    mkdir -p "${pkgdir}/etc/kernel/install.d"
     touch "${pkgdir}/etc/kernel/install.d/90-loaderentry.install"
-    
+
     # mask the mkinitcpio hooks
     mkdir -p "${pkgdir}/etc/pacman.d/hooks"
     touch "${pkgdir}/etc/pacman.d/hooks/90-mkinitcpio-install.hook"
