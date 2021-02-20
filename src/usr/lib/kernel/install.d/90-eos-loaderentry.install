@@ -23,8 +23,8 @@ BOOT_MNT=$(stat -c %m $BOOT_ROOT)
 ENTRY_DIR=${ENTRY_DIR_ABS#$BOOT_MNT}
 
 if [[ $COMMAND == remove ]]; then
-    rm -f "$BOOT_ROOT/loader/entries/$MACHINE_ID-$KERNEL_VERSION-fallback.conf"
-    rm -f "$BOOT_ROOT/loader/entries/$MACHINE_ID-$KERNEL_VERSION-fallback+"*".conf"
+    rm -f "$BOOT_ROOT/loader/entries/$MACHINE_ID-$KERNEL_VERSION.conf"
+    rm -f "$BOOT_ROOT/loader/entries/$MACHINE_ID-$KERNEL_VERSION+"*".conf"
     exit 0
 fi
 
@@ -67,9 +67,9 @@ if [[ -f /etc/kernel/tries ]]; then
         echo "/etc/kernel/tries does not contain an integer." >&2
         exit 1
     fi
-    LOADER_ENTRY="$BOOT_ROOT/loader/entries/$MACHINE_ID-$KERNEL_VERSION-fallback+$TRIES.conf"
+    LOADER_ENTRY="$BOOT_ROOT/loader/entries/$MACHINE_ID-$KERNEL_VERSION+$TRIES.conf"
 else
-    LOADER_ENTRY="$BOOT_ROOT/loader/entries/$MACHINE_ID-$KERNEL_VERSION-fallback.conf"
+    LOADER_ENTRY="$BOOT_ROOT/loader/entries/$MACHINE_ID-$KERNEL_VERSION.conf"
 fi
 
 cp "$KERNEL_IMAGE" "$ENTRY_DIR_ABS/linux" &&
@@ -79,7 +79,7 @@ cp "$KERNEL_IMAGE" "$ENTRY_DIR_ABS/linux" &&
     exit 1
 }
 
-INITRD_OPTIONS=( "${@:${INITRD_OPTIONS_START}}" )
+INITRD_OPTIONS=( "/boot/amd-ucode.img" "/boot/intel-ucode.img" "initrd" )
 
 for initrd in "${INITRD_OPTIONS[@]}"; do
     if [[ -f "${initrd}" ]]; then
@@ -97,7 +97,7 @@ done
 
 # If no initrd option is supplied, fall back to "initrd" which is
 # the name used by dracut when generating it in its kernel-install hook
-[[ ${#INITRD_OPTIONS[@]} == 0 ]] && INITRD_OPTIONS=( initrd-fallback )
+[[ ${#INITRD_OPTIONS[@]} == 0 ]] && INITRD_OPTIONS=( initrd )
 
 mkdir -p "${LOADER_ENTRY%/*}" || {
     echo "Could not create loader entry directory '${LOADER_ENTRY%/*}'." >&2
@@ -108,7 +108,7 @@ mkdir -p "${LOADER_ENTRY%/*}" || {
     echo "Creating $LOADER_ENTRY"
 {
     echo "title      $PRETTY_NAME"
-    echo "version    $KERNEL_VERSION-fallback"
+    echo "version    $KERNEL_VERSION"
     echo "machine-id $MACHINE_ID"
     echo "options    ${BOOT_OPTIONS[*]}"
     echo "linux      $ENTRY_DIR/linux"
