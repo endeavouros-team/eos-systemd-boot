@@ -1,5 +1,5 @@
 pkgname=eos-systemd-boot
-pkgver=0.01
+pkgver=0.02
 pkgrel=1
 pkgdesc='Enables systemd-boot automation using kernel-install on EndeavourOS'
 arch=(any)
@@ -14,6 +14,9 @@ package()
     # install the package files
     cp -a ${srcdir}/${pkgname}/src/usr ${pkgdir}
 
+    # mask the default loaderentry creator
+    touch "${pkgdir}/etc/kernel/install.d/90-loaderentry.install"
+    
     # mask the mkinitcpio hooks
     mkdir -p "${pkgdir}/etc/pacman.d/hooks"
     touch "${pkgdir}/etc/pacman.d/hooks/90-mkinitcpio-install.hook"
