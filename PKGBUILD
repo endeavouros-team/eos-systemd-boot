@@ -1,5 +1,5 @@
 pkgname=eos-systemd-boot
-pkgver=0.02
+pkgver=0.03
 pkgrel=1
 pkgdesc='Enables systemd-boot automation using kernel-install on EndeavourOS'
 arch=(any)
@@ -13,6 +13,9 @@ package()
 {
     # install the package files
     cp -a ${srcdir}/${pkgname}/src/usr ${pkgdir}
+
+    # set the permissions on the files in /usr/bin
+    chmod 755 ${pkgdir}/usr/bin/rebuild-initramfs
 
     # mask the default loaderentry creator
     mkdir -p "${pkgdir}/etc/kernel/install.d"
