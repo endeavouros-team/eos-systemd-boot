@@ -12,7 +12,7 @@ sha256sums=('SKIP')
 package()
 {
     # install the package files
-    cp -a ${srcdir}/${pkgname}/src/usr ${pkgdir}
+    cp -a ${srcdir}/${pkgname}/src/{usr,etc} ${pkgdir}
 
     # set the permissions on the files in /usr/bin
     chmod 755 ${pkgdir}/usr/bin/rebuild-initramfs
