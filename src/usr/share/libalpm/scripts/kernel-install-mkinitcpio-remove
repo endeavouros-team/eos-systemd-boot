@@ -1,0 +1,14 @@
+#!/bin/bash -e
+
+while read -r line; do
+    if ! read -r pkgbase > /dev/null 2>&1 < "${line%/vmlinuz}/pkgbase"; then
+        # if the kernel has no pkgbase, we skip it
+        continue
+    fi
+
+    # remove the preset for the package being removed
+    preset="/etc/mkinitcpio.d/${pkgbase}.preset"
+    if [[ -e ${preset} ]]; then
+        rm ${preset}
+    fi
+done

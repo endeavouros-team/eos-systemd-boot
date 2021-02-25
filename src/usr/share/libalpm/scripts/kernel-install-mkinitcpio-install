@@ -1,0 +1,38 @@
+#!/bin/bash -e
+
+while read -r line; do
+
+    if ! read -r pkgbase > /dev/null 2>&1 < "${line%/vmlinuz}/pkgbase"; then
+        # if the kernel has no pkgbase, we skip it
+        continue
+    fi
+    
+    # parse the input
+    version=$(basename "${line%/vmlinuz}")
+	vmlinuz="/${line}"
+    packagename=$(cat ${line%/vmlinuz}/pkgbase)
+
+    preset_file="/etc/mkinitcpio.d/${packagename}.preset"
+  
+    # get the machine-id
+    machineid=$(cat /etc/machine-id)
+    if [[ -z ${machineid} ]]; then
+        echo "Failed to get the machine ID"
+        exit
+    fi
+
+    # Find the configured esp
+    esp=$(bootctl -p)
+
+    # create a preset compatible with kernel-install
+    preset_file="/etc/mkinitcpio.d/${packagename}.preset"
+    echo ":: Modifying ${preset_file}"
+
+    echo 'ALL_config="/etc/mkinitcpio.conf"' > ${preset_file}
+    echo 'ALL_kver="'"${esp}/${machineid}/${version}/linux"'"' >> ${preset_file}
+    echo 'PRESETS=('default' 'fallback')' >> ${preset_file}
+    echo 'default_image="'"${esp}/${machineid}/${version}/initrd"'"' >> ${preset_file}
+    echo 'fallback_image="'"${esp}/${machineid}/${version}/initrd-fallback"'"' >> ${preset_file}
+    echo 'fallback_options="-S autodetect"' >> ${preset_file}
+
+done
