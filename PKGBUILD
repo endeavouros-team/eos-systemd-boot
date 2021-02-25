@@ -14,9 +14,6 @@ package()
     # install the package files
     cp -a ${srcdir}/${pkgname}/src/{usr,etc} ${pkgdir}
 
-    # set the permissions on the files in /usr/bin
-    chmod 755 ${pkgdir}/usr/bin/rebuild-initramfs
-
     # mask the default loaderentry creator
     mkdir -p "${pkgdir}/etc/kernel/install.d"
     touch "${pkgdir}/etc/kernel/install.d/90-loaderentry.install"
