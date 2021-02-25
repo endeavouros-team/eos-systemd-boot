@@ -2,7 +2,7 @@
 
 while read -r line; do
     version=$(basename "${line%/vmlinuz}")
-    echo ":: Installing kernel $version"
+    echo ":: Running kernel-install for kernel $version"
     
     kernel-install $1 "${version}" "${line}"
 done
