@@ -3,10 +3,10 @@ pkgver=0.9
 pkgrel=1
 pkgdesc='Enables systemd-boot automation using kernel-install on EndeavourOS'
 arch=(any)
-url='https://gitlab.com/dalto.8/eos-systemd-boot'
+url='https://github.com/endeavouros-team/eos-systemd-boot'
 license=(GPL2)
 depends=(systemd)
-source=(git+https://gitlab.com/dalto.8/eos-systemd-boot.git)
+source=(git+https://github.com/endeavouros-team/eos-systemd-boot.git)
 sha256sums=('SKIP')
 
 package()
