@@ -1,4 +1,4 @@
-# EOS systemd-boot
+# EndeavourOS systemd-boot
 
 **original source:** https://gitlab.com/dalto.8/eos-systemd-boot
 
